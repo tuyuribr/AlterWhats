@@ -3,9 +3,17 @@ A simple php project to change whatsapp messages, corrupt backups/logs and remov
 
 ## Install
 
-Clone repo
+( I'm hopping that you will use a Windows machine for this )
 
-config.php
+###Windows
+
+Install a php server in the computer that will connect to the cellphone 
+I recommend using [XAMPP](https://www.apachefriends.org/download.html) and the following install tutorial will be arround this solution
+
+After installing xampp Clone the repository (download as zip and unzip it);
+
+And put the content in the htdocs folder of XAMPP ( if you installed it in C: it will be C:/xampp/htdocs/ )
+
 
 
 ## Warnings
