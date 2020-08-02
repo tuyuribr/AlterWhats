@@ -9,7 +9,7 @@ A simple php project to change whatsapp messages, corrupt backups/logs and remov
 
 Install a php server in the computer that will connect to the cellphone 
 I recommend using [XAMPP](https://www.apachefriends.org/download.html) and the following install tutorial will be arround this solution
-
+To install Xampp download the latest version (php number higher), and follow the instalation. You only need to install the php+apache Service
 After installing xampp Clone the repository (download as zip and unzip it);
 And put the content in the htdocs folder of XAMPP ( if you installed it in C: it will be C:/xampp/htdocs/ )
 It's recomended to extract the content to a folder called "alterWhats" to make configuration easy
