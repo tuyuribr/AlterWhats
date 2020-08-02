@@ -30,7 +30,7 @@ You will need to open a ADB shell to your phone first, to do so open your adb lo
 Now type "adb shell", the adb daemon will start and you should get a command line inside your phone (If you can't connect to your phone try confirm auth in the phone and install your phone drivers, google is your friend here)  
   
 After getting the shell open, you should get root privileges, if you only need to type "su" and press enter to get root privilege you have to set the **"$CFG['customSuPath']"** var in "config.php" to **FALSE**.  
-If to get root you need a customCommand you should set the var to the command, for example the [BlueStacks Emulator](https://www.bluestacks.com/) have a custom path and should set **"$CFG['customSuPath']"** var in "config.php" to **/system/xbin/bstk/su**.  
+If to get root you need a customCommand you should set the var to the command, for example the [BlueStacks Emulator](https://www.bluestacks.com/) have a custom path and should set **"$CFG['customSuPath']"** var in "config.php" to **"/system/xbin/bstk/su"** (dont forget ").  
 
 After getting root you should locate your whatsapp location, usually it is in /data/data/com.whatsapp/ , so try "ls -l /data/data/com.whatsapp/" if your device have whatsapp in this location you should get something like :  
 ```
@@ -55,7 +55,7 @@ Now lets config the rest of the vars just to make sure that everything is alrigh
   
 ```
 /* start flush */
-If You Using Xampp skyp this, if you aren't, delete every thing between /* start flush */ and /* end flush */
+If You Using Xampp skip this, if you aren't, delete every thing between /* start flush */ and /* end flush */
 /* end flush */
 ```
   
