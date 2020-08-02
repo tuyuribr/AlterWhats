@@ -16,13 +16,17 @@ $CFG['noAjax'] = true; // noAjax dont kill ALL ajax in the website
 
 
 /*CONFIGS*/
-$CFG['adbPath']="C:/adb/adb.exe"; //the path to the adb handler ( if you are on a linux distro try only "adb" )
+$CFG['systemPath'] = "C:/xampp/htdocs/alterWhats/"; // the current path of the system ( php files )
+$CFG['systemUrl'] = "http://127.0.0.1/alterWhats/"; // the system url ( to access via web ) ( default will be localhost or 127.0.0.1 ) we need the "http:" or "https:"
+
+
+
+$CFG['adbPath']=$CFG['systemPath']."adb/adb.exe"; //the path to the adb handler ( if you are on a linux distro try only "adb" )
 $CFG['whatsappDir']="C:/xampp/htdocs/alterWhats/currentWhatsapp/"; // the FULL PATH to the whatsapp dir
 $CFG['whatsappBackupDir']="C:/xampp/htdocs/alterWhats/whatsappBackups/"; // the FULL PATH to the backups dir ( if you are going to import with the system )
 
 
-$CFG['systemPath'] = "C:/xampp/htdocs/alterWhats/"; // the current path of the system ( php files )
-$CFG['systemUrl'] = "http://127.0.0.1/alterWhats/"; // the system url ( to access via web ) ( default will be localhost or 127.0.0.1 ) we need the "http:" or "https:"
+
 
 $CFG['remoteWhatsappDir'] = "/data/data/com.whatsapp/"; //if you are having troubles, uncomment the line bellow
 // $CFG['remoteWhatsappDir'] = "/data/user/0/com.whatsapp/"; 
