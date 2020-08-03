@@ -1,6 +1,7 @@
 # AlterWhats
 A simple php project to change whatsapp messages, corrupt backups/logs and remove any evidence of the original message   
-![Hits](https://hits.seeyoufarm.com/api/count/keep/badge.svg?url=AlterWhats)
+  
+<a href="https://hits.seeyoufarm.com"/><img src="https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fgithub.com%2Ftuyuribr%2FAlterWhats%2F"/></a>
 
 ## Install
 
