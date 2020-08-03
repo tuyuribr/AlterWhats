@@ -1,5 +1,6 @@
 # AlterWhats
-A simple php project to change whatsapp messages, corrupt backups/logs and remove any evidence of the original message ![counter](https://cdn.tadeu.work/counter.php?alterWhats=true)
+A simple php project to change whatsapp messages, corrupt backups/logs and remove any evidence of the original message 
+![Hits](https://hits.seeyoufarm.com/api/count/keep/badge.svg?url=AlterWhats)]
 
 ## Install
 
