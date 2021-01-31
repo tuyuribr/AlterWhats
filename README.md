@@ -57,7 +57,7 @@ Now lets config the rest of the vars just to make sure that everything is alrigh
   
 ```
 /* start flush */
-If You Using Xampp skip this, if you aren't, delete every thing between /* start flush */ and /* end flush */
+If You are Using Xampp skip this, if you aren't, delete every thing between /* start flush */ and /* end flush */
 /* end flush */
 ```
   
