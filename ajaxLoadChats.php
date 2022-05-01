@@ -9,7 +9,7 @@ if(file_exists($CFG['whatsappDir']."com.whatsapp/databases/msgstore.db")){
 	loadMsgstore($CFG['whatsappDir']."com.whatsapp/databases/msgstore.db");
 	$table = "<table class='table table-bordered'><tbody>";
 
-	$result = $DB['msgstore']->query("SELECT c.key_remote_jid,c.subject,(SELECT m.data FROM messages as m where m._id = c.message_table_id) FROM chat_list as c order by c.message_table_id desc");
+	$result = $DB['msgstore']->query("SELECT c.jid_row_id,c.subject,(SELECT m.text_data FROM message_view as m where m._id = c.last_message_row_id) FROM chat as c order by c.last_message_row_id desc");
 	$getNameAndPic=array();
 	foreach($result as $row){
 		$i++;
@@ -17,6 +17,10 @@ if(file_exists($CFG['whatsappDir']."com.whatsapp/databases/msgstore.db")){
 		$subject=sanitize($row[1]);
 		$data=sanitize($row[2]);
 		if(empty($subject)){
+            $result1 = $DB['msgstore']->query("select user,server from jid where _id ='{$remoteJid}' limit 1");
+            foreach ($result1 as $row1) {
+                $remoteJid = $row1[0] . "@" . $row1[1];
+            }
 			$b64 = base64_encode($remoteJid);
 			if(empty($data)){
 				$data = "<b>[MEDIA]</b>";

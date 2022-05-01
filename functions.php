@@ -7,11 +7,11 @@ function newEcho($string,$type="js"){
 		if($CFG['noAjax']){
 			//sanitize ? <>
 			$string = str_replace("document.getElementById","parent.document.getElementById",$string);
-			echo "<script>$string</script>".PHP_EOL; return;
-		}else{
-			echo $string; return;
-		}
-	}
+			echo "<script>$string</script>".PHP_EOL;
+        }else{
+			echo $string;
+        }
+    }
 	
 }
 function delTree($dir) {
@@ -28,46 +28,75 @@ function sanitize($string,$type="default"){
 	if(is_array($string)){
 		$string = $string[0];//make recursive in future
 	}
-	if($type == "default"){
-		$string = htmlspecialchars($string, ENT_QUOTES, 'UTF-8');
-		return $string;
-	}
-	if($type == "alphaNum"){
-		$string = preg_replace("/[^A-Za-z0-9?!]/",'',$string);
-		return $string;
-	}
-	if($type == "numbers"){
-		$string = preg_replace("/[^0-9?!]/",'',$string);
-		return $string;
-	}
-	if($type == "remoteJid"){
-		$string = preg_replace("/[^A-Za-z0-9\.@?!]/",'',$string);
-		return $string;
-	}
-	if($type == "file"){
-		$string = preg_replace("/[^A-Za-z0-9\/\\\.\?\=?!]/",'',$string);
-		$string = str_replace("..",".",$string);
-		$string = str_replace("..",".",$string);
-		return $string;
-	}
-	if($type=="removeLines"){
-		$string = preg_replace("/[\n\r]/"," ",$string);
-		return $string;
-	}
-	if($type=="slash"){
-		$string = str_replace("\\","\\\\",$string);
-		$string = str_replace("'","\\'",$string);
-		$string = str_replace('"','\\"',$string);
-		return $string;
-	}
+    switch ($type){
+        case("default"):{
+            return htmlspecialchars($string, ENT_QUOTES, 'UTF-8');
+        }
+        case("alphaNum"):{
+            return preg_replace("/[^A-Za-z0-9?!]/",'',$string);
+        }
+        case("numbers"):{
+            return preg_replace("/[^0-9?!]/",'',$string);
+        }
+        case("remoteJid"):{
+            return preg_replace("/[^A-Za-z0-9\.@?!]/",'',$string);
+        }
+        case("file"):{
+            $string = preg_replace("/[^A-Za-z0-9\/\\\.\?\=?!]/",'',$string);
+            $string = str_replace("..",".",$string);
+            return str_replace("..",".",$string);
+        }
+        case("removeLines"):{
+            return preg_replace("/[\n\r]/"," ",$string);
+        }
+        case("slash"):{
+            $string = str_replace("\\","\\\\",$string);
+            $string = str_replace("'","\\'",$string);
+            return str_replace('"','\\"',$string);
+        }
+    }
 
-	
 	return false;
 }
 function adb($command){
 	global $CFG;
 	exec($CFG['adbPath']." ".$command);
 	return;
+}
+function getCurrentCustomSuPath(){
+    global $CFG;
+    $test = array("su","/system/xbin/bstk/su");
+    foreach($test as $command){
+        $result = exec($CFG['adbPath'] . " shell {$command} -c \"whoami\"");
+        $result = strtolower($result);
+        if(strpos($result,"root") !==false){
+            $CFG['customSuPath'] = $command;
+            return $command;
+        }
+    }
+    die('[auto fail] invalid su path, set one in $CFG');
+}
+function getCurrentUserAndGroup(){
+    global $CFG;
+    if($CFG['customSuPath'] == false) {
+        $CFG['customSuPath']="su";
+    }elseif($CFG['customSuPath'] =="auto"){
+        $CFG['customSuPath'] = getCurrentCustomSuPath();
+    }
+
+    $result = exec($CFG['adbPath'] . " shell {$CFG['customSuPath']} -c \"stat -c '%U' {$CFG['remoteWhatsappDir']}databases\"");
+    $result = escapeshellarg(sanitize(trim($result),"removeLines"));
+    $result = str_replace('"',"",$result);
+    $result = str_replace("'","",$result);
+    if(strlen($result) > 2){
+        $CFG['chownUser'] = $result;
+        $CFG['chownGroup'] = $result;
+        return $result;
+    }else{
+        die('[auto fail] invalid chownUser, set one in $CFG');
+    }
+
+
 }
 function adbShell($command,$onlyAdb=false){
 	global $CFG;
@@ -79,12 +108,14 @@ function adbShell($command,$onlyAdb=false){
 	if($CFG['customSuPath'] == false){
 		$exec .='su -c "' . $command . '"';
 	}else{
-		$exec .= $CFG['customSuPath'] .' -c "' . $command . '"';
+        if($CFG['customSuPath'] != "auto") {
+            $exec .= $CFG['customSuPath'] . ' -c "' . $command . '"';
+        }else{
+            $exec .= getCurrentCustomSuPath() . ' -c "'.$command.'"';
+        }
 	}
 	// echo $exec;die;
 	exec($exec);
-	return;
-	
 }
 function appendTerminal($string){
 	$string = sanitize($string,"slash");

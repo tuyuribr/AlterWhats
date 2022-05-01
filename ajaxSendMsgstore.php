@@ -29,6 +29,10 @@ if($CFG['indirectPullPush']){
 	adbShell("mv {$CFG['indirectPullPushPath']}/msgstore.db {$CFG['remoteWhatsappDir']}databases/msgstore.db");
 	
 	if($CFG['chown']){
+        if($CFG['chownUser']=="auto"){
+            $CFG['chownUser'] = getCurrentUserAndGroup();
+            $CFG['chownGroup'] = $CFG['chownUser'];
+        }
 		newEcho(appendTerminal("chown msgstore"));
 		adbShell("chown -R {$CFG['chownUser']}:{$CFG['chownGroup']} {$CFG['remoteWhatsappDir']}/databases");
 	}

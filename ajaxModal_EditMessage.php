@@ -14,15 +14,15 @@ if(file_exists($CFG['whatsappDir']."com.whatsapp/databases/msgstore.db")){
 	loadMsgstore($CFG['whatsappDir']."com.whatsapp/databases/msgstore.db");
 	
 	
-	$stmt = $DB['msgstore']->prepare("SELECT data,timestamp,key_from_me FROM messages WHERE key_id = '{$keyId}' limit 1"); 
+	$stmt = $DB['msgstore']->prepare("SELECT text_data,timestamp,from_me FROM message_view WHERE key_id = '{$keyId}' limit 1");
 	$stmt->execute(); 
 	$row = $stmt->fetch();
 	if(empty($row['timestamp'])){
 		newEcho('alert("message not found")');
 	}else{
-	$message=sanitize($row['data']);
+	$message=sanitize($row['text_data']);
 	$timestamp = substr($row['timestamp'], 0, -3);
-		if($row['key_from_me']){
+		if($row['from_me']){
 			$fromMe ="true";
 		}else{
 			$fromMe ="false";

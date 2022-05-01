@@ -11,15 +11,18 @@ if(file_exists($CFG['whatsappDir']."com.whatsapp/databases/msgstore.db")){
 	newEcho(appendTerminal("Loading msgstore.db"));
 	loadMsgstore($CFG['whatsappDir']."com.whatsapp/databases/msgstore.db");
 	
-	$stmt = $DB['msgstore']->prepare("SELECT _id,data,key_remote_jid FROM messages WHERE key_id = '{$keyId}' limit 1"); // limit 1 just to be sure 
+	$stmt = $DB['msgstore']->prepare("SELECT _id,text_data,chat_row_id FROM message WHERE key_id = '{$keyId}' limit 1"); // limit 1 just to be sure
 	$stmt->execute(); 
 	$row = $stmt->fetch();
 	$messageId = $row['_id'];
-	$messageOldData = $row['data'];
-	$b64 = base64_encode($row['key_remote_jid']);
+	$messageOldData = $row['text_data'];
+    $stmt = $DB['msgstore']->prepare("select raw_string_jid from chat_view where _id = {$row['chat_row_id']}"); // limit 1 just to be sure
+    $stmt->execute();
+    $row2 = $stmt->fetch();
+	$b64 = base64_encode($row2['raw_string_jid']);
 	if(!empty($messageId)){
 		newEcho(appendTerminal("UPDATE messages [{$messageId}] (msgstore.db)"));
-		$stmt = $DB['msgstore']->prepare("Update messages set data = :newMessage where _id ='{$messageId}' ");
+		$stmt = $DB['msgstore']->prepare("Update message set text_data = :newMessage where _id ='{$messageId}' ");
 		$stmt->bindParam(':newMessage', $data, PDO::PARAM_STR);
 		$stmt->execute();
 		if($CFG['ftsv2']){
@@ -42,43 +45,27 @@ if(file_exists($CFG['whatsappDir']."com.whatsapp/databases/msgstore.db")){
 			// $stmt->bindParam(':ftsJid', $c1ftsJid, PDO::PARAM_STR);
 			$stmt->execute();
 			
-		}else{
-			$stmt = $DB['msgstore']->prepare("SELECT c0content FROM message_fts_content WHERE docid = '{$messageId}' limit 1"); // limit 1 just to be sure 
-			$stmt->execute(); 
-			$row = $stmt->fetch();
-			$messageContent = $row['c0content'];
-			// $c1ftsJid = $row['c1fts_jid'];
-			
-			newEcho(appendTerminal("UPDATE message_fts_content [{$messageId}] (msgstore.db)"));
-			$stmt = $DB['msgstore']->prepare("UPDATE message_fts_content set c0content = :newMessage where docid ='{$messageId}' ");
-			$stmt->bindParam(':newMessage', $dataToFtsv, PDO::PARAM_STR);
-			$stmt->execute();
-			//message_fts dont have any keys so we need to use "rowid" to update
-			newEcho(appendTerminal("UPDATE message_fts (msgstore.db)"));
-			$stmt = $DB['msgstore']->prepare("UPDATE message_fts set content = :newMessage where rowid = '{$messageId}' ");
-			$stmt->bindParam(':newMessage', $dataToFtsv, PDO::PARAM_STR);
-			$stmt->execute();
-			
 		}
 		//messages_fts dont have any keys so we need to use "rowid" to update
-		newEcho(appendTerminal("UPDATE messages_fts (msgstore.db)"));
-		$stmt = $DB['msgstore']->prepare("UPDATE messages_fts set content = :newMessage where rowid = '{$messageId}'");
-		$stmt->bindParam(':newMessage', $dataToFtsv, PDO::PARAM_STR);
-		$stmt->execute();
-		
-		newEcho(appendTerminal("UPDATE messages_fts_content (msgstore.db)"));
-		$stmt = $DB['msgstore']->prepare("UPDATE messages_fts set content = :newMessage where docid = '{$messageId}'");
-		$stmt->bindParam(':newMessage', $dataToFtsv, PDO::PARAM_STR);
-		$stmt->execute();
+//		newEcho(appendTerminal("UPDATE messages_fts (msgstore.db)"));
+//		$stmt = $DB['msgstore']->prepare("UPDATE messages_fts set content = :newMessage where rowid = '{$messageId}'");
+//		$stmt->bindParam(':newMessage', $dataToFtsv, PDO::PARAM_STR);
+//		$stmt->execute();
+//
+//		newEcho(appendTerminal("UPDATE messages_fts_content (msgstore.db)"));
+//		$stmt = $DB['msgstore']->prepare("UPDATE messages_fts set content = :newMessage where docid = '{$messageId}'");
+//		$stmt->bindParam(':newMessage', $dataToFtsv, PDO::PARAM_STR);
+//		$stmt->execute();
 		newEcho(appendTerminal("<b>Message updated</b>"));
 		
 	}else{
 		newEcho("alert('message not found');");
 	}
+
 	
 	newEcho(appendTerminal("closing msgstore.db"));
 	closeMsgstore();
-	
+
 
 	
 }else{

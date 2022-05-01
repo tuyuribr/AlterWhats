@@ -5,11 +5,11 @@
 <br>
 <button type="button" id="importWhatsapp" onclick="importWhatsapp();" class="btn btn-info">Import whatsappDir from adb</button><br><br>
 <button type="button" id="loadChats" onclick="loadChats();" class="btn btn-success">Load Chats</button><br><br>
-<button type="button" id="checkFts" onclick="checkFts();" class="btn btn-warning">Check fts version</button><br><br>
+<!--<button type="button" id="checkFts" onclick="checkFts();" class="btn btn-warning">Check fts version</button><br><br>-->
 <button type="button" id="corruptLogs" onclick="corruptLogs();" class="btn btn-danger">Corrupt log files</button><br><br>
 <button type="button" id="corruptBackups" onclick="corruptBackups();" class="btn btn-danger">Corrupt Whatsapp backup files</button><br><br>
 <button type="button" onclick="sendMsgstore()" id="sendMsgstore" class="btn btn-success">Send only msgstore.db</button><br><br>
-<button type="button" class="btn btn-success" onclick="sendAll();" id="sendAll">Send all the files back to whatsapp</button><br><br>
+<button type="button" class="btn btn-success" onclick="sendAll();" id="sendAll">Send all files back to device</button><br><br>
 </div>
 <script>
 function checkFts(){

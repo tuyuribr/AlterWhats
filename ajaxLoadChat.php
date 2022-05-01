@@ -31,7 +31,7 @@ if(!empty($remoteJid)){
 		</thead>
 		<tbody>";
 		$i=0;
-		$result = $DB['msgstore']->query("SELECT key_id,key_from_me,data,timestamp,media_wa_type,media_caption from messages where key_remote_jid = '{$remoteJid}' order by _id desc limit {$limit}");
+		$result = $DB['msgstore']->query("SELECT key_id,from_me,text_data,timestamp,message_type from message_view where chat_row_id in (select chat_view._id from chat_view where raw_string_jid ='{$remoteJid}') order by _id desc limit {$limit}");
 		$data = array();
 		foreach ($result as $row){
 			$data[]=$row;
@@ -41,18 +41,21 @@ if(!empty($remoteJid)){
 		foreach ($data as $row){
 			$row['timestamp'] = substr($row['timestamp'], 0, -3); // need to remove last 3 chars ( ms timestamp)
 			$keyId = sanitize($row['key_id'],"alphaNum");
-			$fromMe = $row['key_from_me'];
-			$data = $row['data'];
+			$fromMe = $row['from_me'];
+			$data = $row['text_data'];
 			$timestamp = $row['timestamp'];
 			$timestamp =  date("Y/m/d H:i:s",$row['timestamp']);
 			
 				$data = sanitize($data);
-				if($row['media_wa_type'] != 0){$data = "<b>[MEDIA]</b><br>" . sanitize($row['media_caption']);}else{
+				if($row['message_type'] != 0){
+                    continue;
+//                    $data = "<b>[MEDIA]</b><br>" . sanitize($row['media_caption']);
+                }else{
 					if(empty($data)){continue;}
 				}
 			
 			
-			if($row['media_wa_type'] == 0){
+			if($row['message_type'] == 0){
 				$table .="<tr onclick='editMsg(\"$keyId\")' style='cursor:pointer'>";
 			}else{
 				$table .="<tr>";

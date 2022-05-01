@@ -3,6 +3,8 @@ A simple php project to change whatsapp messages, corrupt backups/logs and remov
   
 <a href="https://hits.seeyoufarm.com"/><img src="https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fgithub.com%2Ftuyuribr%2FAlterWhats%2F"/></a>
 
+Compatible WhatsApp version: 2.22.9.78
+
 ## Install
 
 ( I'm hopping that you will use a Windows machine for this )

@@ -42,8 +42,12 @@ if($CFG['indirectPullPush']){
 	adbShell("rm {$CFG['remoteWhatsappDir']}files/Logs/whatsapp.log");
 	
 	if($CFG['chown']){
-	newEcho(appendTerminal("chown all"));
-	adbShell("chown -R {$CFG['chownUser']}:{$CFG['chownGroup']} {$CFG['remoteWhatsappDir']}");
+        if($CFG['chownUser']=="auto"){
+            $CFG['chownUser'] = getCurrentUserAndGroup();
+            $CFG['chownGroup'] = $CFG['chownUser'];
+        }
+        newEcho(appendTerminal("chown all"));
+        adbShell("chown -R {$CFG['chownUser']}:{$CFG['chownGroup']} {$CFG['remoteWhatsappDir']}");
 	}
 	
 	newEcho(appendTerminal('RMing '.sanitize($CFG['indirectPullPushPath'])));
