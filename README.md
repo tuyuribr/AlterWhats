@@ -93,7 +93,7 @@ The add message functionality isn't 100%
 ## License
 ```
 AlterWhats.
-Copyright (C) 2020  yuri at tadeu dot work
+Copyright (C) 2022  yuri at tadeu dot work
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

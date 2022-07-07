@@ -3,6 +3,7 @@ require_once("config.php");
 
 newEcho(appendTerminal("/*START EDIT MESSAGE*/"));
 $keyId = sanitize($_GET['keyId'],'alphaNum');
+$remoteJid = sanitize($_GET['remoteJid'],'remoteJid');
 $data = base64_decode($_GET['message']); // maybe sanitize to not explode the db ? ( current is sanitizing in PDO )
 $dataToFtsv = dataToFts($data);
 // $dataToFtsv = utf8_encode($dataToFtsv);
@@ -16,10 +17,7 @@ if(file_exists($CFG['whatsappDir']."com.whatsapp/databases/msgstore.db")){
 	$row = $stmt->fetch();
 	$messageId = $row['_id'];
 	$messageOldData = $row['text_data'];
-    $stmt = $DB['msgstore']->prepare("select raw_string_jid from chat_view where _id = {$row['chat_row_id']}"); // limit 1 just to be sure
-    $stmt->execute();
-    $row2 = $stmt->fetch();
-	$b64 = base64_encode($row2['raw_string_jid']);
+	$b64 = base64_encode($remoteJid);
 	if(!empty($messageId)){
 		newEcho(appendTerminal("UPDATE messages [{$messageId}] (msgstore.db)"));
 		$stmt = $DB['msgstore']->prepare("Update message set text_data = :newMessage where _id ='{$messageId}' ");

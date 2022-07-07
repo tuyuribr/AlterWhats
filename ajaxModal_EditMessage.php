@@ -3,6 +3,7 @@ require_once("config.php");
 
 
 $keyId = sanitize($_GET['keyId'],'alphaNum');
+$remoteJid = sanitize($_GET['remoteJid'],'remoteJid');
 newEcho(appendTerminal("/*Building modal - Edit Message*/"));
 
 	$fromMe = "error";
@@ -40,9 +41,10 @@ if(file_exists($CFG['whatsappDir']."com.whatsapp/databases/msgstore.db")){
 
 newEcho('document.getElementById("modalTitle").innerHTML="Edit Message";');
 
-$modalBody = '<div class="form-group"><label for="data">Message:</label> <textarea class="form-control" id="data">'.$message.'</textarea></div>';
+$modalBody = '<div class="form-group"><label for="data">Message:</label> <textarea class="form-control" id="dataEdit">'.$message.'</textarea></div>';
 $modalBody .= 'From me : '.$fromMe;
 $modalBody .= '<input type="hidden" name="keyId" value="'.$keyId.'" id="keyId">';
+$modalBody .= '<input type="hidden" name="remoteJid" value="'.$remoteJid.'" id="remoteJidEdit">';
 $timestamp = date("Y/m/d H:i:s",$timestamp);
 $modalBody .= '<div class="form-group"> <label for="timestamp">Message Timestamp (GMT 0)</label> <input type="text" value="'.$timestamp.'" class="form-control" id="timestamp" disabled></div>';
 

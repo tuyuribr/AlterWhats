@@ -99,16 +99,15 @@ include($CFG['systemPath']."head.php"); // this file "load" the HTML resources
 		
 	}
 	
-		function editMsg(keyId){
-		$('#defaultModal').modal('show'); 
-		
+		function editMsg(keyId,remoteJid){
+		$('#defaultModal').modal('show');
+        remoteJid = atob(remoteJid);
 		<?php if ($CFG['noAjax']){?>
-		// load in an iframe ???? ahahahhahaha
-		document.getElementById('loader').src = '<?php echo $CFG['systemUrl'] ?>ajaxModal_EditMessage.php?keyId='+keyId;
+		document.getElementById('loader').src = '<?php echo $CFG['systemUrl'] ?>ajaxModal_EditMessage.php?remoteJid='+encodeURIComponent(remoteJid)+'&keyId='+keyId;
 		<?php }else{ ?> 
 			$.ajax({
 				type: 'GET',
-				url: '<?php echo $CFG['systemUrl'] ?>ajaxModal_EditMessage.php?keyId='+keyId,
+				url: '<?php echo $CFG['systemUrl'] ?>ajaxModal_EditMessage.php?remoteJid='+encodeURIComponent(remoteJid)+'&keyId='+keyId,
 				success: function(data) {
 					 eval(data);
 				}
@@ -120,16 +119,17 @@ include($CFG['systemPath']."head.php"); // this file "load" the HTML resources
 	
 	function saveMessage(){
 		var keyId = document.getElementById("keyId").value;
-		var data = document.getElementById("data").value;
+		var data = document.getElementById("dataEdit").value;
+        var remoteJid = document.getElementById("remoteJidEdit").value;
 		data = escape(btoa(data));
 		
 		<?php if ($CFG['noAjax']){?>
 		// load in an iframe ???? ahahahhahaha
-		document.getElementById('loader').src = '<?php echo $CFG['systemUrl'] ?>ajaxEditMessage.php?keyId='+keyId+'&message='+data;
+		document.getElementById('loader').src = '<?php echo $CFG['systemUrl'] ?>ajaxEditMessage.php?remoteJid='+encodeURIComponent(remoteJid)+'&keyId='+keyId+'&message='+data;
 		<?php }else{ ?> 
 			$.ajax({
 				type: 'GET',
-				url: '<?php echo $CFG['systemUrl'] ?>ajaxEditMessage.php?keyId='+keyId+'&message='+data,
+				url: '<?php echo $CFG['systemUrl'] ?>ajaxEditMessage.php?remoteJid='+encodeURIComponent(remoteJid)+'&keyId='+keyId+'&message='+data,
 				success: function(data) {
 					 eval(data);
 				}

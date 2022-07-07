@@ -31,7 +31,8 @@ if(!empty($remoteJid)){
 		</thead>
 		<tbody>";
 		$i=0;
-		$result = $DB['msgstore']->query("SELECT key_id,from_me,text_data,timestamp,message_type from message_view where chat_row_id in (select chat_view._id from chat_view where raw_string_jid ='{$remoteJid}') order by _id desc limit {$limit}");
+        $sql = "SELECT key_id,from_me,text_data,timestamp,message_type from message where chat_row_id in (select chat_row_id from message where _id in (SELECT last_message_row_id FROM chat_view where raw_string_jid = '{$remoteJid}')) order by _id desc limit {$limit}";
+		$result = $DB['msgstore']->query($sql);
 		$data = array();
 		foreach ($result as $row){
 			$data[]=$row;
@@ -56,7 +57,7 @@ if(!empty($remoteJid)){
 			
 			
 			if($row['message_type'] == 0){
-				$table .="<tr onclick='editMsg(\"$keyId\")' style='cursor:pointer'>";
+				$table .="<tr onclick='editMsg(\"$keyId\",\"$b64\")' style='cursor:pointer'>";
 			}else{
 				$table .="<tr>";
 			}
